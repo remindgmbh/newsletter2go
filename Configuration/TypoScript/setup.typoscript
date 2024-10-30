@@ -1,0 +1,17 @@
+plugin.tx_form {
+    settings {
+        yamlConfigurations {
+            # 1730289250 = EXT:rmnd_newsletter2go/Configuration/Form/BaseSetup.yaml
+            1730289282 = EXT:rmnd_newsletter2go/Configuration/Form/Newsletter2goSubscribeFinisher.yaml
+        }
+    }
+}
+
+module.tx_form {
+    settings {
+        yamlConfigurations {
+            # 1730289250 = EXT:rmnd_newsletter2go/Configuration/Form/BaseSetup.yaml
+            1730289282 = EXT:rmnd_newsletter2go/Configuration/Form/Newsletter2goSubscribeFinisher.yaml
+        }
+    }
+}

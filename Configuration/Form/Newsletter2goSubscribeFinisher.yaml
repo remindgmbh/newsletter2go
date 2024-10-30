@@ -1,0 +1,28 @@
+prototypes:
+  brevo:
+    formElementsDefinition:
+      Form:
+        formEditor:
+          editors:
+            910:
+              selectOptions:
+                1730294428:
+                  value: Newsletter2goSubscribe
+                  label: 'Newsletter2go Subscribe'
+          propertyCollections:
+            finishers:
+              1730294442:
+                identifier: Newsletter2goSubscribe
+                editors:
+                  100:
+                    identifier: header
+                    templateName: Inspector-CollectionElementHeaderEditor
+                    label: 'Newsletter2go Subscribe'
+
+    finishersDefinition:
+      Newsletter2goSubscribe:
+        implementationClassName: Remind\Newsletter2go\Domain\Finishers\Newsletter2goSubscribeFinisher
+        formEditor:
+          iconIdentifier: form-finisher
+        FormEngine:
+          label: 'Newsletter2go Subscribe'
