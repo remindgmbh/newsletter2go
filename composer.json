@@ -1,7 +1,7 @@
 {
-    "name": "remind/name",
+    "name": "remind/newsletter2go",
     "type": "typo3-cms-extension",
-    "description": "[DESCRIPTION]",
+    "description": "Remind - Newsletter2go",
     "license": [ "GPL-3.0-or-later" ],
     "authors": [
         {
@@ -11,12 +11,12 @@
     ],
     "autoload": {
         "psr-4": {
-            "Remind\\[NAME]\\": "Classes"
+            "Remind\\Newsletter2go\\": "Classes"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Remind\\[NAME]\\Tests\\": "Tests"
+            "Remind\\Newsletter2go\\Tests\\": "Tests"
         }
     },
     "config": {
@@ -46,7 +46,7 @@
     "prefer-stable": true,
     "extra": {
         "typo3/cms": {
-            "extension-key": "rmnd_name"
+            "extension-key": "rmnd_newsletter2go"
         }
     },
     "scripts": {
