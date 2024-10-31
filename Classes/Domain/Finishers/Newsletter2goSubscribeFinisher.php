@@ -12,7 +12,7 @@ use TYPO3\CMS\Form\Domain\Finishers\AbstractFinisher;
 
 class Newsletter2goSubscribeFinisher extends AbstractFinisher
 {
-    const NL2GO_SUBMIT_URL = 'https://api.newsletter2go.com/forms/submit/';
+    private const NL2GO_SUBMIT_URL = 'https://api.newsletter2go.com/forms/submit/';
 
     private RequestFactory $requestFactory;
 
@@ -43,10 +43,10 @@ class Newsletter2goSubscribeFinisher extends AbstractFinisher
         }
 
         $additionalOptions = [
+            RequestOptions::HTTP_ERRORS => false,
             RequestOptions::JSON => [
                 'recipient' => $recipient,
             ],
-            RequestOptions::HTTP_ERRORS => false,
             RequestOptions::TIMEOUT => 10,
         ];
 
