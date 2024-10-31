@@ -4,7 +4,7 @@ prototypes:
       Form:
         formEditor:
           editors:
-            910:
+            900:
               selectOptions:
                 1730294428:
                   value: Newsletter2goSubscribe
@@ -18,6 +18,37 @@ prototypes:
                     identifier: header
                     templateName: Inspector-CollectionElementHeaderEditor
                     label: 'Newsletter2go Subscribe'
+                  120:
+                    identifier: formId
+                    templateName: Inspector-TextEditor
+                    label: 'Form ID'
+                    propertyPath: options.formId
+                    propertyValidators:
+                      10: NotEmpty
+                  130:
+                    identifier: successPage
+                    templateName: Inspector-Typo3WinBrowserEditor
+                    buttonLabel: 'Page'
+                    browsableType: pages
+                    iconIdentifier: apps-pagetree-page-default
+                    label: 'Success Page'
+                    propertyPath: options.successPage
+                    propertyValidatorsMode: OR
+                    propertyValidators:
+                      10: Integer
+                      20: FormElementIdentifierWithinCurlyBracesExclusive
+                  140:
+                    identifier: errorPage
+                    templateName: Inspector-Typo3WinBrowserEditor
+                    buttonLabel: 'Page'
+                    browsableType: pages
+                    iconIdentifier: apps-pagetree-page-default
+                    label: 'Error Page'
+                    propertyPath: options.errorPage
+                    propertyValidatorsMode: OR
+                    propertyValidators:
+                      10: Integer
+                      20: FormElementIdentifierWithinCurlyBracesExclusive
 
     finishersDefinition:
       Newsletter2goSubscribe:
@@ -26,3 +57,30 @@ prototypes:
           iconIdentifier: form-finisher
         FormEngine:
           label: 'Newsletter2go Subscribe'
+          elements:
+            formId:
+              label: formId
+              config:
+                type: input
+            successPage:
+              label: 'Success Page'
+              config:
+                type: group
+                allowed: pages
+                size: 1
+                minitems: 1
+                maxitems: 1
+                fieldWizard:
+                  recordsOverview:
+                    disabled: 1
+            errorPage:
+              label: 'Error Page'
+              config:
+                type: group
+                allowed: pages
+                size: 1
+                minitems: 1
+                maxitems: 1
+                fieldWizard:
+                  recordsOverview:
+                    disabled: 1
