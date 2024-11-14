@@ -43,8 +43,32 @@ prototypes:
                     buttonLabel: 'Page'
                     browsableType: pages
                     iconIdentifier: apps-pagetree-page-default
-                    label: 'Error Page'
+                    label: 'Error Page (generic)'
                     propertyPath: options.errorPage
+                    propertyValidatorsMode: OR
+                    propertyValidators:
+                      10: Integer
+                      20: FormElementIdentifierWithinCurlyBracesExclusive
+                  150:
+                    identifier: errorPageInvalidEmail
+                    templateName: Inspector-Typo3WinBrowserEditor
+                    buttonLabel: 'Page'
+                    browsableType: pages
+                    iconIdentifier: apps-pagetree-page-default
+                    label: 'Error Page (invalid email)'
+                    propertyPath: options.errorPageInvalidEmail
+                    propertyValidatorsMode: OR
+                    propertyValidators:
+                      10: Integer
+                      20: FormElementIdentifierWithinCurlyBracesExclusive
+                  160:
+                    identifier: errorPageDuplicateEmail
+                    templateName: Inspector-Typo3WinBrowserEditor
+                    buttonLabel: 'Page'
+                    browsableType: pages
+                    iconIdentifier: apps-pagetree-page-default
+                    label: 'Error Page (duplicate email)'
+                    propertyPath: options.errorPageDuplicateEmail
                     propertyValidatorsMode: OR
                     propertyValidators:
                       10: Integer
@@ -74,7 +98,29 @@ prototypes:
                   recordsOverview:
                     disabled: 1
             errorPage:
-              label: 'Error Page'
+              label: 'Error Page (generic)'
+              config:
+                type: group
+                allowed: pages
+                size: 1
+                minitems: 1
+                maxitems: 1
+                fieldWizard:
+                  recordsOverview:
+                    disabled: 1
+            errorPageInvalidEmail:
+              label: 'Error Page (invalid email)'
+              config:
+                type: group
+                allowed: pages
+                size: 1
+                minitems: 1
+                maxitems: 1
+                fieldWizard:
+                  recordsOverview:
+                    disabled: 1
+            errorPageDuplicateEmail:
+              label: 'Error Page (duplicate email)'
               config:
                 type: group
                 allowed: pages
