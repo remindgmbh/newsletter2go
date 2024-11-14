@@ -28,7 +28,9 @@ class Newsletter2goSubscribeFinisher extends AbstractFinisher
         $formRuntime = $this->finisherContext->getFormRuntime();
         $formDefinition = $formRuntime->getFormDefinition();
         $successPageUid = (int) $this->parseOption('successPage');
-        $errorPageUid = (int) $this->parseOption('errorPage');
+        $genericErrorPageUid = (int) $this->parseOption('errorPage');
+        $invalidEmailErrorPageUid = (int) $this->parseOption('errorPageInvalidEmail');
+        $duplicateEmailErrorPageUid = (int) $this->parseOption('errorPageDuplicateEmail');
         $url = self::NL2GO_SUBMIT_URL . $formId;
 
         $recipient = [];
@@ -57,14 +59,31 @@ class Newsletter2goSubscribeFinisher extends AbstractFinisher
             // Nothing to do here, redirect to error page instead
         }
 
+        $statusCode = $response?->getStatusCode() ?? 400;
         $redirectPid = null;
-        if ($response) {
-            $statusCode = $response->getStatusCode();
-            $redirectPid = $statusCode === 201 ? $successPageUid : $errorPageUid;
-        }
 
-        if (!$redirectPid) {
-            $redirectPid = $errorPageUid;
+        if ($statusCode) {
+            switch ($statusCode) {
+                case 201:
+                    $redirectPid = $successPageUid;
+                    break;
+                case 200:
+                    $responseBody = json_decode($response->getBody()->getContents(), true);
+                    $isDuplicateError = count($responseBody['value'][0]['result']['error']['recipients']['duplicate'] ?? []) > 0;
+                    $isInvalidError = count($responseBody['value'][0]['result']['error']['recipients']['invalid'] ?? []) > 0;
+
+                    if ($isDuplicateError) {
+                        $redirectPid = $duplicateEmailErrorPageUid;
+                    }
+
+                    if ($isInvalidError) {
+                        $redirectPid = $invalidEmailErrorPageUid;
+                    }
+                    break;
+                case 400:
+                    $redirectPid = $genericErrorPageUid;
+                    break;
+            }
         }
 
         $this->finisherContext->cancel();
