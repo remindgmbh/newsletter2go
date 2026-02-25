@@ -6,9 +6,11 @@ namespace Remind\Newsletter2go\Domain\Finishers;
 
 use Exception;
 use GuzzleHttp\RequestOptions;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Form\Domain\Finishers\AbstractFinisher;
+use UnexpectedValueException;
 
 class Newsletter2goSubscribeFinisher extends AbstractFinisher
 {
@@ -24,6 +26,13 @@ class Newsletter2goSubscribeFinisher extends AbstractFinisher
     protected function executeInternal(): ?string
     {
         $formId = $this->parseOption('formId');
+        if (
+            !is_string($formId)
+            || $formId === ''
+        ) {
+            throw new UnexpectedValueException('Missing or invalid formId option.');
+        }
+
         $formValues = $this->finisherContext->getFormValues();
         $formRuntime = $this->finisherContext->getFormRuntime();
         $formDefinition = $formRuntime->getFormDefinition();
@@ -59,31 +68,33 @@ class Newsletter2goSubscribeFinisher extends AbstractFinisher
             // Nothing to do here, redirect to error page instead
         }
 
-        $statusCode = $response?->getStatusCode() ?? 400;
+        if (!$response instanceof ResponseInterface) {
+            return null;
+        }
+
+        $statusCode = $response->getStatusCode();
         $redirectPid = null;
 
-        if ($statusCode) {
-            switch ($statusCode) {
-                case 201:
-                    $redirectPid = $successPageUid;
-                    break;
-                case 200:
-                    $responseBody = json_decode($response->getBody()->getContents(), true);
-                    $isDuplicateError = count($responseBody['value'][0]['result']['error']['recipients']['duplicate'] ?? []) > 0;
-                    $isInvalidError = count($responseBody['value'][0]['result']['error']['recipients']['invalid'] ?? []) > 0;
+        switch ($statusCode) {
+            case 201:
+                $redirectPid = $successPageUid;
+                break;
+            case 200:
+                $responseBody = json_decode($response->getBody()->getContents(), true);
+                $isDuplicateError = count($responseBody['value'][0]['result']['error']['recipients']['duplicate'] ?? []) > 0;
+                $isInvalidError = count($responseBody['value'][0]['result']['error']['recipients']['invalid'] ?? []) > 0;
 
-                    if ($isDuplicateError) {
-                        $redirectPid = $duplicateEmailErrorPageUid;
-                    }
+                if ($isDuplicateError) {
+                    $redirectPid = $duplicateEmailErrorPageUid;
+                }
 
-                    if ($isInvalidError) {
-                        $redirectPid = $invalidEmailErrorPageUid;
-                    }
-                    break;
-                case 400:
-                    $redirectPid = $genericErrorPageUid;
-                    break;
-            }
+                if ($isInvalidError) {
+                    $redirectPid = $invalidEmailErrorPageUid;
+                }
+                break;
+            case 400:
+                $redirectPid = $genericErrorPageUid;
+                break;
         }
 
         $this->finisherContext->cancel();
